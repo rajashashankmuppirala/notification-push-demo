@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring boot SSE page example</title>
+</head>
+<body>
+<div id=content">
+    <h3> SSE events - DEMO</h3>
+    <div id="events"></div>
+</div>
+<script type="application/javascript">
+    const subscribeEvents = function () {
+        const eventSource = new EventSource('/subscribe');
+
+        eventSource.onmessage = function (e) {
+            const notification = JSON.parse(e.data);
+            const html = "<span><b>New event</b>  <i>"
+                + "[" + notification.id + "] " + notification.message + "</span>";
+            document.getElementById("events").innerHTML = html + "<br/>" + document.getElementById("events").innerHTML;
+        };
+    };
+    window.onload = subscribeEvents;
+    window.onbeforeunload = function() {
+        eventSource.close();
+    }
+</script>
+</body>
+</html>
